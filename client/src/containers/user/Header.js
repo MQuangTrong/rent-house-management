@@ -122,7 +122,7 @@ const Header = () => {
                             Blog
                         </NavLink>
                         <NavLink
-                            to={path.BOOKING_LIST}
+                            to={isLoggedIn ? path.BOOKING_LIST : path.LOGIN}  // Nếu chưa đăng nhập, chuyển hướng đến trang LOGIN
                             className={({ isActive }) =>
                                 `block py-2 px-4 transition-colors duration-300 ${isActive ? 'bg-orange-400 text-white' : 'hover:bg-orange-400 hover:text-white'
                                 }`

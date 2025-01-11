@@ -13,6 +13,7 @@ router.get('/get-booking-pending-approval', verifyToken, bookingController.getBo
 router.get('/get-booked-room', verifyToken, bookingController.getBookedRoom)
 router.patch('/approval-booking/:id', verifyToken, bookingController.approvalBooking)
 router.get('/history', verifyToken, bookingController.getHistory)
+router.get('/history-detail/:id', verifyToken, bookingController.getHistoryDetail)
 router.patch('/finish-booking/:id', verifyToken, bookingController.finishBooking)
 router.get('/get-booking-detail/:id', verifyToken, bookingController.getBookingDetail)
 router.get('/get-booked-user-detail/:id', verifyToken, bookingController.getBookedUserDetail)

@@ -55,7 +55,7 @@ export const getAllBlogDeleted = async (req, res) => {
 }
 
 export const createBlog = async (req, res) => {
-    const { id } = req.user.id
+    const  id = req.user.id
     try {
         const response = await blogService.createBlogService(req.body, id)
         return res.status(200).json(response)

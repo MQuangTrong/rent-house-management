@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as service from "../../services";
 import { Link, useSearchParams } from 'react-router-dom';
 import { Pagination } from "../../components";
+import DOMPurify from 'dompurify';
 
 const Blog = () => {
     const [blogs, setBlogs] = useState([]);
@@ -70,7 +71,12 @@ const Blog = () => {
                                         />
                                         <div className="p-4">
                                             <h3 className="text-lg font-semibold text-gray-800 line-clamp-2">{blog.tieuDe}</h3>
-                                            <p className="text-gray-600 text-sm line-clamp-3">{blog.noiDung}</p>
+                                            <div
+                                                className="text-gray-600 text-sm line-clamp-3"
+                                                dangerouslySetInnerHTML={{
+                                                    __html: DOMPurify.sanitize(blog?.noiDung),
+                                                }}
+                                            />
                                         </div>
                                     </Link>
                                 ))

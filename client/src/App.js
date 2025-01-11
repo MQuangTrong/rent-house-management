@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import { Home, Login, Register, Room, HomePage, Blog, BookingList, VerifyEmail, Profile, ChangePassword, ResetPassword, RoomDetail, RegisterHost, BlogDetail, PaymentResult, History } from './containers/user'
+import { Home, Login, Register, Room, HomePage, Blog, BookingList, VerifyEmail, Profile, ChangePassword, ResetPassword, RoomDetail, RegisterHost, BlogDetail, PaymentResult, History, HistoryDetail } from './containers/user'
 import { HomeSystem, ApproveHost, HomeAdmin, ApproveHostDetail, UserManager, UserLockedManager, UserManagerDetail, AdminProfile, ApprovePost, PostAll, PostDetail, BlogManager, BlogDeletedManager, BlogManagerDetail, AddBlog, EditBlog, GeneralStatistics } from './containers/admin'
 import { HomeHost, HomePageHost, RoomList, AddRoom, RoomListDetail, RoomListDelete, EditRoom, AllBooking, AllBookedRoom, AllBookingDetail, BookedUser, BookedUserDetail, HostProfile, ChangePasswordHost, RevenueStatistics } from './containers/host'
 import { path } from './ultils/constant'
@@ -28,6 +28,7 @@ function App() {
           <Route path={path.BLOG_DETAIL} element={<BlogDetail/>} />
           <Route path={path.PAYMENT_RESULT} element={<PaymentResult/>} />
           <Route path={path.HISTORY} element={<History/>} />
+          <Route path={path.HISTORY_DETAIL} element={<HistoryDetail/>} />
         </Route>
 
         <Route path={path.ADMIN} element={<HomeSystem />} >

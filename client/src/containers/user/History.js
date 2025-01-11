@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import * as services from "../../services"; // Import API
 import "react-toastify/dist/ReactToastify.css";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Pagination } from "../../components";
 
 const History = () => {
+    const navigate = useNavigate()
     const [bookingRequests, setBookingRequests] = useState([]);
     const [filteredRequests, setFilteredRequests] = useState([]);
     const [loading, setLoading] = useState(true); // Trạng thái loading
@@ -62,6 +63,10 @@ const History = () => {
         });
     }, [currentPage]);
 
+    const handleViewDetails = (id) => {
+        navigate(`/chi-tiet-lich-su/${id}`);
+    };
+
     if (loading) {
         return <div className="text-center py-4">Đang tải dữ liệu...</div>; // Hiển thị khi đang tải dữ liệu
     }
@@ -106,6 +111,7 @@ const History = () => {
                             <th className="px-4 py-2 border">Ngày đặt</th>
                             <th className="px-4 py-2 border">Ngày kết thúc</th>
                             <th className="px-4 py-2 border">Trạng thái</th>
+                            <th className="px-4 py-2 border">Chức năng</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -136,6 +142,14 @@ const History = () => {
                                     >
                                         {booking.trangThai}
                                     </td>
+                                    <td className="px-4 py-2">
+                                        <button
+                                            className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-700"
+                                            onClick={() => handleViewDetails(booking.id)}
+                                        >
+                                            Chi tiết
+                                        </button>
+                                    </td>
                                 </tr>
                             ))
                         ) : (
@@ -150,10 +164,10 @@ const History = () => {
             </div>
 
             <Pagination
-                    totalPages={totalPages}
-                    currentPage={currentPage}
-                    onPageChange={handlePageChange}
-                />
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+            />
         </div>
     );
 };

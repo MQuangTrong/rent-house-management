@@ -476,7 +476,7 @@ export const approvalBookingService = (id) => new Promise(async (resolve, reject
 
         resolve({
             err: 0,
-            msg: 'Đã duyệt đặt phòng thành công',
+            msg: 'Đã xác nhận đặt phòng thành công',
         });
     } catch (error) {
         reject(error)
@@ -553,6 +553,83 @@ export const getHistoryService = (id) => new Promise(async (resolve, reject) => 
         reject(error)
     }
 });
+
+export const getHistoryDetailService = (id) => new Promise(async (resolve, reject) => {
+    try {
+        const bookingDetail = await db.ChiTietDatPhong.findOne({
+            where: {
+                id
+            },
+            include: [
+                {
+                    model: db.PhongTro,
+                    as: 'phongTro',
+                    attributes: ['tenPhong', 'giaPhong', 'moTa', "tienCoc", "diaChi"], // Thông tin phòng trọ
+                    include: [
+                        {
+                            model: db.AnhTro,
+                            as: 'anhTros',
+                        },
+                        {
+                            model: db.Phuong,
+                            as: 'phuong',
+                            include: [
+                                {
+                                    model: db.Quan,
+                                    as: 'quan',
+                                },
+                            ]
+                        },
+                        {
+                            model: db.ChuTro,
+                            as: 'chuTro',
+                            include: [
+                                {
+                                    model: db.NguoiDung,
+                                    as: 'nguoiDung',
+                                },
+                            ],
+                        },
+                    ]
+                },
+            ],
+            attributes: [
+                [db.Sequelize.fn('DATE', db.Sequelize.col('ngayDat')), 'ngayDat'], 'soLuong', 'thoiGianThue', "trangThai", "id"
+            ]
+        })
+
+        const ngayDat = moment(bookingDetail.ngayDat);
+        const ngayKetThuc = ngayDat.add(bookingDetail.thoiGianThue, 'months').format('YYYY-MM-DD'); // Cộng thêm thời gian thuê
+        const fullAddress = `${bookingDetail.phongTro?.diaChi}, ${bookingDetail.phongTro?.phuong?.tenPhuong}, ${bookingDetail.phongTro?.phuong?.quan?.tenQuan}`;
+
+        const result = {
+            id: bookingDetail.id,
+            hoTen: bookingDetail.phongTro?.chuTro?.nguoiDung?.hoTen,
+            email: bookingDetail.phongTro?.chuTro?.nguoiDung?.email,
+            SDT: bookingDetail.phongTro?.chuTro?.nguoiDung?.SDT,
+            CCCD: bookingDetail.phongTro?.chuTro?.nguoiDung?.CCCD,
+            gioiTinh: bookingDetail.phongTro?.chuTro?.nguoiDung?.gioiTinh ? 'Nữ' : 'Nam',
+            anhCCCDMatTruoc: bookingDetail.phongTro?.chuTro?.nguoiDung?.anhCCCDMatTruoc,
+            anhCCCDMatSau: bookingDetail.phongTro?.chuTro?.nguoiDung?.anhCCCDMatSau,
+            tenPhong: bookingDetail.phongTro?.tenPhong,
+            giaPhong: bookingDetail.phongTro?.giaPhong,
+            tienCoc: bookingDetail.phongTro?.tienCoc,
+            anh: bookingDetail.phongTro?.anhTros[0]?.anh,
+            diaChi: fullAddress,
+            soLuong: bookingDetail.soLuong,
+            ngayDat: bookingDetail.ngayDat, // Phần ngày đã được trích xuất từ `ngayDat`
+            ngayKetThuc: ngayKetThuc, // Ngày kết thúc (ngày thuê)
+            trangThai: bookingDetail.trangThai,
+        }
+        resolve({
+            err: 0,
+            msg: 'OK',
+            result
+        });
+    } catch (error) {
+        reject(error)
+    }
+})
 
 export const finishBookingService = (id) => new Promise(async (resolve, reject) => {
     try {

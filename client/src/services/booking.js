@@ -98,6 +98,18 @@ export const apiHistory = () => new Promise(async (resolve, reject) => {
     }
 })
 
+export const apiHistoryDetail = (id) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await axiosConfig({
+            method: 'get',
+            url: `/api/v1/booking/history-detail/${id}`,
+        })
+        resolve(response)
+    } catch (error) {
+        reject(error)
+    }
+})
+
 export const apiFinishlBooking = (id) => new Promise(async (resolve, reject) => {
     try {
         const response = await axiosConfig({

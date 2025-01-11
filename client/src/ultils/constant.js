@@ -14,6 +14,7 @@ export const path = {
     BLOG_DETAIL: 'chi-tiet-blog/:id',
     PAYMENT_RESULT: 'payment-result',
     HISTORY: 'lich-su-dat-phong',
+    HISTORY_DETAIL: 'chi-tiet-lich-su/:id',
 
     //quản lý
     ADMIN: '/quan-ly',

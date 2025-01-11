@@ -84,6 +84,19 @@ export const getHistory = async (req, res) => {
   }
 };
 
+export const getHistoryDetail = async (req, res) => {
+  const {id} = req.params
+  try {
+    const response = await services.getHistoryDetailService(id);
+    res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({
+      err: 1,
+      msg: 'fail at booking controller: ' + error
+  });
+  }
+};
+
 export const approvalBooking = async (req, res) => {
   const {id} = req.params
   try {

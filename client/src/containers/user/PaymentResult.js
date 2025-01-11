@@ -56,7 +56,7 @@ const PaymentResult = () => {
 
                 {showDetails && (
                     <>
-                        <p className="text-center text-gray-600">Số tiền: {amount} VND</p>
+                        <p className="text-center text-gray-600">Số tiền: {amount / 100} VND</p>
                         <p className="text-center text-gray-600">Mã đơn hàng: {orderId}</p>
                     </>
                 )}

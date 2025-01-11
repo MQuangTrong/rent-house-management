@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import * as services from "../../services";  // Import hàm apiBookingDetail
 import { useParams, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import Swal from "sweetalert2";  // Import SweetAlert2
 import "react-toastify/dist/ReactToastify.css";
-import { path } from "../../ultils/constant";
 
-const AllBookingDetail = () => {
+const HistoryDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [bookingDetail, setBookingDetail] = useState(null);
@@ -16,7 +13,7 @@ const AllBookingDetail = () => {
     useEffect(() => {
         const fetchBookingDetail = async () => {
             try {
-                const response = await services.apiBookingDetail(id);
+                const response = await services.apiHistoryDetail(id);
                 setBookingDetail(response.data.result); // Giả sử response trả về đúng format như trên
                 setLoading(false);
             } catch (error) {
@@ -27,33 +24,6 @@ const AllBookingDetail = () => {
 
         fetchBookingDetail();
     }, [id]);
-
-    const handleApprove = async () => {
-        // Sử dụng SweetAlert2 để xác nhận hành động hủy
-        const result = await Swal.fire({
-            title: 'Bạn chắc chắn muốn xác nhận?',
-            text: 'Bạn muốn xác nhận yêu cầu đặt phòng này',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: "OK",
-            cancelButtonText: "Hủy",
-            reverseButtons: true,
-        });
-
-        if (result.isConfirmed) {
-            try {
-                const response = await services.apiApprovalBooking(id);
-                if (response.data.err === 0) {
-                    toast.success(response.data.msg)
-                    navigate(`${path.HOST}/yeu-cau-dat-phong`)
-                } else {
-                    toast.error(response.data.msg)
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        }
-    };
 
     const handleBackClick = () => {
         navigate(-1); // Trở về trang trước đó
@@ -74,11 +44,10 @@ const AllBookingDetail = () => {
                 </svg>
                 Trở về
             </button>
-            <h1 className="text-2xl font-semibold mb-4 text-center text-secondary2">Chi Tiết Đặt Phòng</h1>
+            <h1 className="text-2xl font-semibold mb-4 text-center text-secondary2">Chi Tiết Lịch Sử Đặt Phòng</h1>
 
             <div className="space-y-6">
-                {/* Thông tin người đặt */}
-                <h1 className="text-2xl font-semibold mb-4 text-secondary2">Thông tin người đặt</h1>
+                <h1 className="text-2xl font-semibold mb-4 text-secondary2">Thông tin chủ trọ</h1>
                 <div className="flex justify-between space-x-4">
                     <div className="w-1/2 flex gap-2 flex gap-2">
                         <strong className="text-lg font-medium">Họ Tên:</strong>
@@ -175,7 +144,20 @@ const AllBookingDetail = () => {
                     <div className="flex justify-between space-x-4">
                         <div className="w-1/2 flex gap-2">
                             <strong className="text-lg font-medium">Trạng Thái:</strong>
-                            <p className="text-lg text-yellow-800">{bookingDetail.trangThai}</p>
+                            <p
+                                className={`text-lg text-green-800 
+                            ${bookingDetail.trangThai === "Đang chờ xác nhận"
+                                        ? " text-yellow-800"
+                                        : bookingDetail.trangThai === "Đã đặt"
+                                            ? " text-green-800"
+                                            : bookingDetail.trangThai === "Hết hạn"
+                                                ? " text-gray-800"
+                                                : bookingDetail.trangThai === "Kết thúc"
+                                                    ? " text-red-800"
+                                                    : ""
+                                    }
+                            `}
+                            >{bookingDetail.trangThai}</p>
                         </div>
                         <div className="w-1/2 flex gap-2">
                             <strong className="text-lg font-medium">Ảnh Phòng:</strong>
@@ -189,16 +171,9 @@ const AllBookingDetail = () => {
 
                 </div>
             </div>
-            <div className="text-center mt-2">
-                <button
-                    onClick={handleApprove}
-                    className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition duration-300 mt-4"
-                >
-                    Xác nhận
-                </button>
-            </div>
+
         </div>
     );
 };
 
-export default AllBookingDetail;
+export default HistoryDetail;
